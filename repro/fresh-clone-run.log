@@ -1,0 +1,41 @@
+=== fresh-clone reproduction record ===
+method: cp -r pack /tmp/mlkem-fresh; rm -rf outputs; bash scripts/run_all.sh (in the copy)
+python3: Python 3.12.3
+files in copy: 23 (outputs/ emptied before the run; 7 logs regenerated)
+run: 2m17.9s, exit 0
+comparison vs committed outputs/: 6/6 deterministic logs byte-identical (spec_fidelity, tail_mutation, input_checks, key_mismatch, caller_misuse, missing_fo_check); timing.log matches on its verdict line (TIMING VERDICT: PASS, N=1000 per path per set, 3 sets); fresh-run gaps -0.4309% / -0.9479% / -0.7721% (512/768/1024)
+--- run stdout (unedited) ---
+=== run_all.sh ===
+python3: Python 3.12.3
+scripts: 7 python3 checks (see outputs/)
+--- running scripts/spec_fidelity.py -> outputs/spec_fidelity.log ---
+PASS spec_fidelity (see outputs/spec_fidelity.log)
+
+--- running scripts/tail_mutation.py -> outputs/tail_mutation.log ---
+PASS tail_mutation (see outputs/tail_mutation.log)
+
+--- running scripts/input_checks.py -> outputs/input_checks.log ---
+PASS input_checks (see outputs/input_checks.log)
+
+--- running scripts/timing.py -> outputs/timing.log ---
+PASS timing (see outputs/timing.log)
+
+--- running scripts/key_mismatch.py -> outputs/key_mismatch.log ---
+PASS key_mismatch (see outputs/key_mismatch.log)
+
+--- running scripts/caller_misuse.py -> outputs/caller_misuse.log ---
+PASS caller_misuse (see outputs/caller_misuse.log)
+
+--- running scripts/missing_fo_check.py -> outputs/missing_fo_check.log ---
+PASS missing_fo_check (see outputs/missing_fo_check.log)
+
+RUN_ALL RESULT: ALL CHECKS PASSED (7/7 scripts)
+
+=== second independent verification (parent, after wording fix pass) ===
+method: cp -r pack /tmp/mlkem-fresh2; rm -rf outputs; bash scripts/run_all.sh (in the copy)
+python3: Python 3.12.3
+date: 22 Nov 2026, 00:26 WIB
+run: 2m15.988s, exit 0
+result: ALL CHECKS PASSED (7/7 scripts)
+comparison vs committed outputs/: 6/6 deterministic logs byte-identical (spec_fidelity, tail_mutation, input_checks, key_mismatch, caller_misuse, missing_fo_check); timing.log matches on its verdict line (TIMING VERDICT: PASS, N=1000 per path per set, 3 sets); fresh-run gaps -0.2513% / +0.3614% / -0.1076% (512/768/1024) vs committed +1.0755% / -1.4641% / -0.9105% — all within the 5% threshold.
+note: this run followed a wording-only fix pass (README title, workflow comment + artifact name, two SOURCES.md lines); no script, data, or log file changed.
