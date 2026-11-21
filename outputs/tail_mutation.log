@@ -1,0 +1,13 @@
+== tail_mutation: Das tail-mutation sweep (every byte position) ==
+[FAKTA] Das 2026/1682: wolfSSL AVX2 compared 1536/1568 bytes; 98.0% of 2048 coefficients recovered from 400 chosen ciphertexts
+-- ML-KEM-512: ct 768 bytes, positions tested 768, acceptances 0 (tail-32: tested 32, acceptances 0) --
+PASS TAIL-512 -- 768/768 mutations rejected with exact Kbar
+PASS TAIL32-512 -- final 32 bytes: 32/32 rejected
+-- ML-KEM-768: ct 1088 bytes, positions tested 1088, acceptances 0 (tail-32: tested 32, acceptances 0) --
+PASS TAIL-768 -- 1088/1088 mutations rejected with exact Kbar
+PASS TAIL32-768 -- final 32 bytes: 32/32 rejected
+-- ML-KEM-1024: ct 1568 bytes, positions tested 1568, acceptances 0 (tail-32: tested 32, acceptances 0) --
+PASS TAIL-1024 -- 1568/1568 mutations rejected with exact Kbar
+PASS TAIL32-1024 -- final 32 bytes: 32/32 rejected
+
+TAIL_MUTATION VERDICT: PASS -- 3424 positions tested, 0 acceptances; every mutation yields exactly J(z||c')

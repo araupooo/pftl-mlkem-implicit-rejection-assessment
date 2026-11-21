@@ -1,0 +1,12 @@
+== missing_fo_check: detector for a removed FO check ==
+[FAKTA] Verifiable Decapsulation (IACR ePrint 2025): the re-encryption check is essential for security but not for functionality -- omitting it is invisible to correctness tests
+control: genuine ct -> correct==shared: True, neutered==shared: True, correct==neutered: True
+PASS CONTROL-AGREE -- correctness tests cannot distinguish the two implementations
+adversarial ciphertexts found: 3 (scanned c1 byte positions until 3 found)
+PASS ADVERSARIAL-FOUND -- 3 ciphertexts decrypt to the chosen message but fail re-encryption
+  c1 byte 0 flipped: correct -> Kbar==J(z||c*): True; neutered -> shared secret K: True; differ: True
+  c1 byte 2 flipped: correct -> Kbar==J(z||c*): True; neutered -> shared secret K: True; differ: True
+  c1 byte 3 flipped: correct -> Kbar==J(z||c*): True; neutered -> shared secret K: True; differ: True
+PASS DETECTOR-DISTINGUISHES -- 3/3 adversarial ciphertexts separate correct from neutered
+
+MISSING_FO_CHECK VERDICT: PASS -- pack catches the invisible failure class: 3/3 adversarial ciphertexts return Kbar on the correct implementation and the genuine shared secret on the neutered one

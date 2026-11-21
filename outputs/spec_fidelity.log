@@ -1,0 +1,22 @@
+== spec_fidelity: ML-KEM KAT verification (accept + reject) ==
+[FAKTA] KAT source: pq-crystals/kyber `standard` @ d5b791c0c601b543233daccbae2845c6197a9e77, vendored data/*.rsp
+-- ML-KEM-512: 100 vectors --
+PASS KAT-COUNT-512 -- 100 vectors
+PASS ACCEPT-512 -- 100/100 decaps == ss
+PASS REJECT-512 -- 200/200 mutated decaps == J(z||c') exactly, != ss
+PASS LIBOQS-SINGLE-512 -- sha256=c70041a761e01cd6426fa60e9fd6a4412c2be817386c8d0f3334898082512782
+PASS LIBOQS-ALL-512 -- sha256=74b470e797cbdbd589a31d387d36c72aad5033446ab5159bf4014c24652b1173
+-- ML-KEM-768: 100 vectors --
+PASS KAT-COUNT-768 -- 100 vectors
+PASS ACCEPT-768 -- 100/100 decaps == ss
+PASS REJECT-768 -- 200/200 mutated decaps == J(z||c') exactly, != ss
+PASS LIBOQS-SINGLE-768 -- sha256=5352539586b6c3df58be6158a6250aeff402bd73060b0a3de68850ac074c17c3
+PASS LIBOQS-ALL-768 -- sha256=e5d6911117c708d8342702db222f66bef5ac5b0314fb8bc36eb22a536c9b34fb
+-- ML-KEM-1024: 100 vectors --
+PASS KAT-COUNT-1024 -- 100 vectors
+PASS ACCEPT-1024 -- 100/100 decaps == ss
+PASS REJECT-1024 -- 200/200 mutated decaps == J(z||c') exactly, != ss
+PASS LIBOQS-SINGLE-1024 -- sha256=f580d851e5fb27e6876e5e203fa18be4cdbfd49e05d48fec3d3992c8f43a13e6
+PASS LIBOQS-ALL-1024 -- sha256=81d1ae0468f62154885b6f2a293c0eb48f9339645357a88bbbc186c57ab0ace0
+
+SPEC_FIDELITY VERDICT: PASS -- accept + reject paths byte-exact for 100 vectors x 3 parameter sets; liboqs single+all hashes match
