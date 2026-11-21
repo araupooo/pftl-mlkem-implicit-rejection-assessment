@@ -1,0 +1,36 @@
+name: verify
+
+# Runs the full ML-KEM implicit-rejection assessment on every push
+# and pull request, and publishes the unedited logs as an artifact so a
+# reviewer can resolve the repo + passing suite independently.
+#
+# Ordering matters: the checksum verification runs FIRST, on the pristine
+# checkout, because scripts/run_all.sh regenerates outputs/ and
+# outputs/timing.log is non-deterministic by nature (raw nanosecond
+# measurements), so a checksum check after the run would always fail on
+# timing.log. The checksum step therefore proves checkout integrity;
+# the run step proves the checks pass; the artifact upload publishes the
+# fresh logs.
+on:
+  push:
+  pull_request:
+
+jobs:
+  verify:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Verify checksums (pristine checkout)
+        run: sha256sum -c SHA256SUMS
+      - name: Run all checks
+        run: bash scripts/run_all.sh
+      - name: Upload unedited logs
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: run-logs
+          path: outputs/
+          if-no-files-found: error
