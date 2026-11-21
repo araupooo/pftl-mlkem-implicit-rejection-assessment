@@ -1,0 +1,34 @@
+== input_checks: FIPS 203 section 7.2 / 7.3 battery ==
+[FAKTA] RUSTSEC-2026-0585 baseline (reported, not measured): 108/112/116 invalid eks accepted per set; 2 invalid dks per set
+-- ML-KEM-512 --
+PASS EK-MODULUS-512 -- 3/3 unreduced eks refused (coeff values (3329, 3330, 4095))
+  [FAKTA] unchecked encaps_internal with unreduced ek proceeds: True (the 7.2 check is load-bearing)
+PASS CT-LENGTH-512 -- 4/4 wrong-length ciphertexts refused (lengths (0, 32, 767, 769))
+PASS DK-EK-TAMPER-512 -- decaps refuses dk whose embedded ek no longer matches H(ek)
+PASS DK-HASH-TAMPER-512 -- decaps refuses dk whose stored H(ek) was tampered
+  [FAKTA] z tamper: 7.3 hash check passes=True (z is outside H(ek)); accept-path key unchanged=True; rejection key changed=True
+PASS DK-Z-TAMPER-512 -- z tampering is invisible to 7.3 and only moves Kbar
+  [FAKTA] RUSTSEC-2026-0585 baseline (reported): 108 invalid eks accepted by pqcrypto-mlkem for ML-KEM-512; this harness refuses 3/3 probed unreduced eks
+  [FAKTA] RUSTSEC-2026-0585 baseline (reported): 2 invalid dks accepted per set; this harness refuses tampered-ek and tampered-hash dks
+-- ML-KEM-768 --
+PASS EK-MODULUS-768 -- 3/3 unreduced eks refused (coeff values (3329, 3330, 4095))
+  [FAKTA] unchecked encaps_internal with unreduced ek proceeds: True (the 7.2 check is load-bearing)
+PASS CT-LENGTH-768 -- 4/4 wrong-length ciphertexts refused (lengths (0, 32, 1087, 1089))
+PASS DK-EK-TAMPER-768 -- decaps refuses dk whose embedded ek no longer matches H(ek)
+PASS DK-HASH-TAMPER-768 -- decaps refuses dk whose stored H(ek) was tampered
+  [FAKTA] z tamper: 7.3 hash check passes=True (z is outside H(ek)); accept-path key unchanged=True; rejection key changed=True
+PASS DK-Z-TAMPER-768 -- z tampering is invisible to 7.3 and only moves Kbar
+  [FAKTA] RUSTSEC-2026-0585 baseline (reported): 112 invalid eks accepted by pqcrypto-mlkem for ML-KEM-768; this harness refuses 3/3 probed unreduced eks
+  [FAKTA] RUSTSEC-2026-0585 baseline (reported): 2 invalid dks accepted per set; this harness refuses tampered-ek and tampered-hash dks
+-- ML-KEM-1024 --
+PASS EK-MODULUS-1024 -- 3/3 unreduced eks refused (coeff values (3329, 3330, 4095))
+  [FAKTA] unchecked encaps_internal with unreduced ek proceeds: True (the 7.2 check is load-bearing)
+PASS CT-LENGTH-1024 -- 4/4 wrong-length ciphertexts refused (lengths (0, 32, 1567, 1569))
+PASS DK-EK-TAMPER-1024 -- decaps refuses dk whose embedded ek no longer matches H(ek)
+PASS DK-HASH-TAMPER-1024 -- decaps refuses dk whose stored H(ek) was tampered
+  [FAKTA] z tamper: 7.3 hash check passes=True (z is outside H(ek)); accept-path key unchanged=True; rejection key changed=True
+PASS DK-Z-TAMPER-1024 -- z tampering is invisible to 7.3 and only moves Kbar
+  [FAKTA] RUSTSEC-2026-0585 baseline (reported): 116 invalid eks accepted by pqcrypto-mlkem for ML-KEM-1024; this harness refuses 3/3 probed unreduced eks
+  [FAKTA] RUSTSEC-2026-0585 baseline (reported): 2 invalid dks accepted per set; this harness refuses tampered-ek and tampered-hash dks
+
+INPUT_CHECKS VERDICT: PASS -- checked wrappers refuse every malformed input; z-tamper behaviour recorded as specified

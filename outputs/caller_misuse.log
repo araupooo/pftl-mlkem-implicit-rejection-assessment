@@ -1,0 +1,27 @@
+== caller_misuse: three minimal callers, runnable transcripts ==
+[FAKTA] FIPS 203 section 6.3: decapsulation uses no randomness and never signals failure; the accept/reject flag must not be returned in any form
+setup: ML-KEM-768, genuine decaps == shared: True
+-- scenario (i): no key confirmation, Kbar used as session key --
+  tampered ct decaps -> session key: bc655b3027d548fe...
+  same tampered ct decaps again -> identical key: True
+  peer's true session key:          a0e28fccceab9b5f...
+  caller key == peer key: False
+  [ANALISIS] LEAK/BREAK: the caller silently uses Kbar as if it were K -- the session is broken (peer cannot decrypt anything), and the failure is deterministic: the same ciphertext always yields the same Kbar, so the rejection is replayable and recognisable across sessions
+PASS MISUSE-NO-KCF -- Kbar used as session key, != peer K, deterministic across runs
+-- scenario (ii): caller logs decapsulation outcomes --
+  LOG: decaps ct=1d13cd98600a... REJECT
+  LOG: decaps ct=1c13cd98600a... REJECT
+  LOG: decaps ct=1c13cd98600a... REJECT
+  LOG: decaps ct=1c13cd98600a... REJECT
+  LOG: decaps ct=1c13cd98600a... ACCEPT
+  [ANALISIS] LEAK/BREAK: the log records accept/reject for every chosen ciphertext -- a decryption-failure oracle written to disk. Anyone who can read the logs (or count log volume / error counters) learns exactly which crafted ciphertexts the key accepted, which is the oracle FIPS 203 section 6.3 forbids returning 'in any form'
+PASS MISUSE-LOGS -- log lines leak ACCEPT/REJECT per chosen ciphertext
+-- scenario (iii): caller retries a rejected ciphertext --
+  retry 1 -> 84394f4492bfb2b7...
+  retry 2 -> 84394f4492bfb2b7... (same: True)
+  retry 3 -> 84394f4492bfb2b7... (same: True)
+  fresh encapsulation decaps == shared: True
+  [ANALISIS] LEAK/BREAK: retrying a rejected ciphertext never changes the outcome -- decapsulation is deterministic, so a retry loop burns queries and, against a static key, hands a key-mismatch attacker free oracle queries; only a fresh encapsulation can succeed
+PASS MISUSE-RETRY -- 3 retries return identical Kbar; fresh encaps succeeds
+
+CALLER_MISUSE VERDICT: PASS -- all three misuse transcripts demonstrate the concrete leak/break as specified

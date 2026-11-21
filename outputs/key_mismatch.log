@@ -1,0 +1,21 @@
+== key_mismatch: Shao et al. baseline-comparison probe ==
+[FAKTA] Shao et al. ESORICS 2026: H(c) omitted from ML-KEM key derivation re-enables Huffman-bound key-mismatch attacks
+[FAKTA] CPA setting assumes a plaintext-checking oracle; the CCA extension instantiates it from power traces (App. C), not from the decapsulation return value
+-- ML-KEM-768, eta1=2, s_0 coefficients in {-2..2} --
+  decompressed u amplitude: 211 (target ceil(q/16)=209)
+  bit-1 windows h' per s value: {-2: [2, 3, 4, 5, 6, 7, 8, 9], -1: [3, 4, 5, 6, 7, 8, 9, 10], 0: [5, 6, 7, 8, 9, 10, 11], 1: [6, 7, 8, 9, 10, 11, 12, 13], 2: [7, 8, 9, 10, 11, 12, 13, 14]}
+PASS WINDOWS-DISTINCT -- windows {-2: [2, 3, 4, 5, 6, 7, 8, 9], -1: [3, 4, 5, 6, 7, 8, 9, 10], 0: [5, 6, 7, 8, 9, 10, 11], 1: [6, 7, 8, 9, 10, 11, 12, 13], 2: [7, 8, 9, 10, 11, 12, 13, 14]}
+PASS TREE-CORRECT -- decision tree recovers every s value from formula bits
+PASS FORMULA-AGREES -- Appendix A formula matches oracle bits at h' in {5,14,11,2}
+  recovered 16/16 coefficients of s_0 correctly
+  total oracle queries: 36
+  measured queries per coefficient: 2.2500
+  [ESTIMASI] Huffman bound: 2.0306 bits/coefficient (eta=2 CBD entropy); measured queries per bit: 1.1080
+  [ESTIMASI] full-key extrapolation: 768 secret coefficients (k*n = 768) at 2.2500 queries/coefficient ~= 1728 queries for a full static key, before lattice post-processing
+PASS RECOVER-16 -- 16/16 coefficients
+PASS QUERIES-BOUND -- 2.2500 queries/coefficient (Huffman bound 2.0306 bits)
+  [FAKTA] CCA level: 8/8 crafted ciphertexts return exactly Kbar = J(z||c) from full decaps (FO rejects all of them)
+PASS CCA-NO-PC-ORACLE -- bare decaps API does not supply the plaintext-checking oracle
+  [ANALISIS] static vs ephemeral: this probe needs 36 queries against ONE key; a static key is exposed to cumulative leakage, an ephemeral key (fresh per session) is not
+
+KEY_MISMATCH VERDICT: PASS -- 16 coefficients recovered at 2.2500 queries/coefficient (1.1080 queries/bit vs 2.0306-bit Huffman bound); CCA decaps rejects all crafted ciphertexts

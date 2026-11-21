@@ -1,0 +1,27 @@
+== timing: accept-path vs reject-path decapsulation timing ==
+[FAKTA] FIPS 203 section 6.3: the accept/reject flag is secret data and must be destroyed before Decaps_internal returns
+method: N=1000 per path per parameter set, interleaved, perf_counter_ns around decaps_internal only
+unit: microseconds per decapsulation
+-- ML-KEM-512 --
+  accept: mean 8097.2 us, median 7556.4 us, stdev 2243.2 us
+  reject: mean 8010.1 us, median 7554.3 us, stdev 1526.1 us
+  mean difference (accept-reject): 87.09 us, 95% CI [-81.07, 255.25] us
+  relative gap: 1.0755% (|gap| < 5% required)
+  median difference: 2.12 us
+PASS TIMING-GAP-512 -- relative gap 1.0755%
+-- ML-KEM-768 --
+  accept: mean 11886.0 us, median 11347.7 us, stdev 1764.5 us
+  reject: mean 12060.0 us, median 11361.9 us, stdev 2680.9 us
+  mean difference (accept-reject): -174.02 us, 95% CI [-372.94, 24.91] us
+  relative gap: -1.4641% (|gap| < 5% required)
+  median difference: -14.22 us
+PASS TIMING-GAP-768 -- relative gap -1.4641%
+-- ML-KEM-1024 --
+  accept: mean 17151.5 us, median 15991.7 us, stdev 3885.1 us
+  reject: mean 17307.7 us, median 16007.4 us, stdev 4531.9 us
+  mean difference (accept-reject): -156.16 us, 95% CI [-526.14, 213.81] us
+  relative gap: -0.9105% (|gap| < 5% required)
+  median difference: -15.63 us
+PASS TIMING-GAP-1024 -- relative gap -0.9105%
+
+TIMING VERDICT: PASS -- accept/reject timing indistinguishable within 5% at N=1000 per path per set (3 sets)
